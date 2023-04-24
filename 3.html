@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Interactive CSV Example</title>
+  <style>
+
+		.top-left {
+			position: fixed;
+			top: 20px;
+			left: 20px;
+  background-color: white;
+  color: #333;
+  border: 2px solid black;
+  border-radius: 50%;
+  padding: 8px 12px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: center;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  overflow: hidden;
+		}
+
+		.top-right {
+			position: fixed;
+			top: 20px;
+			right: 20px;
+  background-color: white;
+  color: #333;
+  border: 2px solid black;
+  border-radius: 50%;
+  padding: 8px 12px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: center;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  overflow: hidden;
+		}
+
+			/* Set the font family for the <h1> element */
+		h1 {
+			font-family: 'Jockey One', sans-serif;
+			text-align: center;
+			color: blue;
+			position: absolute;
+			top: 5%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			color: white;
+			text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+		}
+		img {
+			display: block;
+			margin: 0 auto;
+			width: 100%;
+			height: 170px;
+		}
+
+		.twitter-timeline {
+			position: absolute;
+			top: 65%;
+			right: 0%;
+			transform: translate(-0%, -50%);
+			width: 350px; /* Change the width to adjust the size */
+			height: 400px; /* Change the height to adjust the size */
+			z-index: 1; /* Set a higher z-index to position the timeline over the image */
+		}
+
+
+
+	  #csv-data {
+    margin-left: 5px;
+    width: 900px;
+  }
+
+#page-buttons {
+  margin-left: 5px;
+}
+
+
+
+    /* Style the table headers */
+    th {
+      background-color: #4CAF50;
+      color: white;
+      text-align: left;
+      padding: 8px;
+    }
+
+    /* Style the table rows */
+    tr:nth-child(even) {background-color: #f2f2f2;}
+    tr:hover {background-color: #ddd;}
+
+    /* Style the pagination links */
+    .pagination {
+      display: inline-block;
+      margin-top: 20px;
+    }
+
+    .pagination a {
+      color: black;
+      float: left;
+      padding: 8px 16px;
+      text-decoration: none;
+      border: 1px solid #ddd;
+    }
+
+    .pagination a.active {
+      background-color: #4CAF50;
+      color: white;
+      border: 1px solid #4CAF50;
+    }
+
+    .pagination a:hover:not(.active) {background-color: #ddd;}
+  </style>
+</head>
+<body>
+
+	<a href="https://www.youtube.com/watch?v=lf6-wi8lab0" target="_blank" class="top-left">TL</a>
+	<a href="https://www.youtube.com/watch?v=lf6-wi8lab0" target="_blank" class="top-right">TR</a>
+
+
+    <h1>BRADPOWERINDEX</h1>
+    <img src="BradStevens.png" alt="Brad Stevens Drinking a Beer" />
+    <a
+      class="twitter-timeline"
+      data-tweet-limit="4"
+      href="https://twitter.com/BRADPOWERINDEX?ref_src=twsrc%5Etfw"
+      >Tweets by BRADPOWERINDEX</a
+    >
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+    <table id="csv-data"></table>
+
+    <div id="page-buttons"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  <script>
+    // Use Papa Parse to read the CSV file
+    Papa.parse('https://raw.githubusercontent.com/Bradhand/turbo-parakeet/main/Results.csv', {
+      download: true,
+      complete: function(results) {
+        // Get the HTML table element
+        const table = document.getElementById('csv-data');
+
+        // Format the first row as table headers
+        const header = table.createTHead();
+        const headerRow = header.insertRow(0);
+        for (let i = 0; i < results.data[0].length; i++) {
+          const cell = headerRow.insertCell(-1);
+          cell.innerHTML = "<b>" + results.data[0][i] + "</b>";
+        }
+
+        // Remove the "Results" header row
+        table.deleteRow(0);
+
+        // Add dark grey background to top row
+        headerRow.style.backgroundColor = '#333';
+        headerRow.style.color = '#fff';
+
+        // Add alternating row colors
+        const tableBody = table.createTBody();
+        for (let i = 0; i < results.data.length; i++) {
+          const row = tableBody.insertRow(-1);
+          for (let j = 0; j < results.data[i].length; j++) {
+            const cell = row.insertCell(-1);
+            cell.innerHTML = results.data[i][j];
+          }
+          row.style.backgroundColor = i % 2 === 0 ? '#f2f2f2' : '#b3c6ff';
+        }
+
+        // Pagination
+        const perPage = 50;
+        const rowCount = tableBody.rows.length;
+        const pageCount = Math.ceil(rowCount / perPage);
+        const pageButtons = document.getElementById('page-buttons');
+
+        for (let i = 1; i <= pageCount; i++) {
+          const button = document.createElement('button');
+          button.innerHTML = i;
+          button.addEventListener('click', function() {
+            const start = (i - 1) * perPage;
+            const end = i * perPage;
+            for (let j = 0; j < rowCount; j++) {
+              if (j >= start && j < end) {
+                tableBody.rows[j].style.display = '';
+              } else {
+                tableBody.rows[j].style.display = 'none';
+              }
+            }
+          });
+          pageButtons.appendChild(button);
+        }
+
+        // Show the first page
+        pageButtons.firstChild.click();
+
+
+      }
+    });
+  </script>
+</body>
+</html>
+
