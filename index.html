@@ -14,13 +14,14 @@
   background-color: white;
   color: #333;
   border: 2px solid black;
+  border-radius: 50%;
   padding: 8px 12px;
   text-decoration: none;
   font-weight: bold;
-  font-size: 10px;
+  font-size: 14px;
   text-align: center;
-  width: 100px;
-  height: 15px;
+  width: 30px;
+  height: 30px;
   line-height: 30px;
   overflow: hidden;
 		}
@@ -62,7 +63,15 @@
 			height: 170px;
 		}
 
-
+		.twitter-timeline {
+			position: absolute;
+			top: 63%;
+			right: 0%;
+			transform: translate(-0%, -50%);
+			width: 350px; /* Change the width to adjust the size */
+			height: 400px; /* Change the height to adjust the size */
+			z-index: 1; /* Set a higher z-index to position the timeline over the image */
+		}
 
 
 
@@ -74,13 +83,6 @@
 #page-buttons {
   margin-left: 5px;
 }
-	  
-	  	.twitter-timeline {
-			margin-right: 5px;
-			width: 350px; /* Change the width to adjust the size */
-			height: 400px; /* Change the height to adjust the size */
-			z-index: 1; /* Set a higher z-index to position the timeline over the image */
-		}
 
 
 
@@ -121,16 +123,12 @@
 </head>
 <body>
 
-	<a href="brad.html" target="_blank" class="top-left">TL</a>
-	<a href="https://www.youtube.com/watch?v=lf6-wi8lab0" target="_blank" class="top-right">TR</a>
+	<a href="brad.html" target="_blank" class="top-left">Snake</a>
+	<a href="5.html" target="_blank" class="top-right">Trae Young</a>
 
 
     <h1>BRADPOWERINDEX</h1>
     <img src="BradStevens.png" alt="Brad Stevens Drinking a Beer" />
-
-
-    <table id="csv-data"></table>
-	
     <a
       class="twitter-timeline"
       data-tweet-limit="4"
@@ -138,6 +136,8 @@
       >Tweets by BRADPOWERINDEX</a
     >
     <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+    <table id="csv-data"></table>
 
     <div id="page-buttons"></div>
 
@@ -208,4 +208,3 @@
   </script>
 </body>
 </html>
-
